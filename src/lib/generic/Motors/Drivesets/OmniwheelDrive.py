@@ -1,11 +1,11 @@
-from ..Motors import MotorModule, default_motor_configuration
-from ...utils.Math import AddMatrix
-from ...generic.logic.Motors.OmniwheelLogic import RadialMove, RadialTurn
+from ...Motors import MotorModule
+from ....utils.Math import AddMatrix
+from ....generic.logic.Motors.OmniwheelLogic import RadialMove, RadialTurn
 
 
 class OmniWheelDrive(MotorModule):
-    def __init__(self, motor_configuration=default_motor_configuration, debug=False):
-        super().__init__(motor_configuration, debug)
+    def __init__(self, motorType, motor_configuration, debug=False):
+        super().__init__(motorType, motor_configuration, debug)
 
     def RadialMove(self, angle, speed=100, motor_order_offset=1):
         """Takes an angle that you want to travel in and sets the current direction to it"""

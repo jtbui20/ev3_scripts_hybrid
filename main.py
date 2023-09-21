@@ -1,11 +1,13 @@
 #!/usr/bin/env pybricks-micropython
-from src.lib.pybricks_fw.Motors import OmniWheelDrive
+from src.lib.generic.Motors.Drivesets import OmniWheelDrive
 from pybricks.hubs import EV3Brick
 from pybricks.parameters import Button, Port, Direction
+from src.lib.pybricks_fw.Motors import PyBricksMotor
 from time import sleep
 
 drive = OmniWheelDrive(
-    motor_configuration=[(Port.A, Direction.CLOCKWISE)],
+    motorType=PyBricksMotor,
+    motor_configuration=[{"Port": Port.A, Direction: Direction.CLOCKWISE}],
     debug=True,
 )
 
