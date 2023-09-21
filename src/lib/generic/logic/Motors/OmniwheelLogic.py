@@ -1,15 +1,14 @@
-from typing import List
 import math
-from utils.Motors import ClampSpeed
-from utils.Math import AngleBetween
+from ....utils.Motors import ClampSpeed
+from ....utils.Math import AngleBetween
 
 
 def RadialMove(
-    angle: int,
-    speed: int = 100,
-    motor_count: int = 4,
-    motor_order_offset: int = 1,
-) -> List[float]:
+    angle,
+    speed=100,
+    motor_count=4,
+    motor_order_offset=1,
+):
     """Takes an angle that you want to travel in and sets the current direction to it"""
     values = [float(0)] * motor_count
     # If speed is 0, set values to 0
@@ -26,13 +25,13 @@ def RadialMove(
 
 
 def RadialTurn(
-    currentAngle: int,
-    targetAngle: int,
-    spread: int = 30,
-    speed: float = 10,
-    motor_count: int = 4,
-    motor_order_offset: int = 1,
-) -> List[float]:
+    currentAngle,
+    targetAngle,
+    spread=30,
+    speed=10,
+    motor_count=4,
+    motor_order_offset=1,
+):
     """Takes an angle that you want to turn towards and sets motor values to it"""
     differenceAngle = AngleBetween(currentAngle, targetAngle)[0]
 

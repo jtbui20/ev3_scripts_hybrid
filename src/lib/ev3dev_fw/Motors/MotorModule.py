@@ -1,8 +1,7 @@
-#!/usr/bin/env python3
 from ev3dev2.motor import LargeMotor, Motor, SpeedPercent
 from ev3dev2.motor import OUTPUT_A, OUTPUT_B, OUTPUT_C, OUTPUT_D
-from typing import List, Callable
-from utils.Motors import ClampSpeed
+from ...utils.Motors import ClampSpeed
+
 
 default_motor_configuration = [
     (OUTPUT_A, LargeMotor),
@@ -16,12 +15,19 @@ class MotorModule:
     """Master class for motor related actions."""
 
     def __init__(self, motor_configuration=default_motor_configuration, debug=False):
-        self.motorReferences: List[Motor] = []
-        self.motorPorts: List[str] = []
+        self.motorReferences = []
+        self.motorPorts = []
         for port, motorType in motor_configuration:
-            m = motorType(port)
-            self.motorPorts.append(port)
-            self.motorReferences.append(m)
+            try:
+                m = motorType(port)
+                self.motorPorts.append(port)
+                self.motorReferences.append(m)
+            except Exception as e:
+                raise Exception(
+                    "Error initializing motor on port {port}: {error}".format(
+                        port=port, error=e
+                    )
+                )
 
         self.defaultMotorValues = [float(0)] * len(self.motorReferences)
 
@@ -31,7 +37,7 @@ class MotorModule:
         if self.debug:
             print("Motors are online")
 
-    def __HandleInterrupt(function: Callable):  # type: ignore
+    def __HandleInterrupt(function):
         def wrapper(self, *args, **kwargs):
             try:
                 return function(*args, **kwargs)
@@ -42,7 +48,9 @@ class MotorModule:
                         self.finalMotorValues[key] = 0
                     except:
                         raise Exception(
-                            f"Error stopping motor {key} on port {self.motorPorts[key]}"
+                            "Error stopping motor {key} on port {port}".format(
+                                key=key, port=self.motorPorts[key]
+                            )
                         )
 
                 raise Exception(
@@ -69,7 +77,11 @@ class MotorModule:
             motor.off() if value == 0 else motor.on(value)
 
         if self.debug:
-            print(f"Running motors at {self.finalMotorValues}")
+            print(
+                "Running motors at {motorValues}".format(
+                    motorValues=self.finalMotorValues
+                )
+            )
 
     @__HandleInterrupt
     def StopMotors(self):
